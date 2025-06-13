@@ -4,7 +4,7 @@
     { "source": "/(.*)", "destination": "/api/$1" },
     { "source": "/(.*)", "destination": "/$1" }
   ],
-  "buildCommand": "cd .. && turbo run build --filter=web --filter=docs",
+  "buildCommand": "cd .. && turbo run build --filter=web --filter=storybook",
   "outputDirectory": ".next",
   "framework": "nextjs"
 }
