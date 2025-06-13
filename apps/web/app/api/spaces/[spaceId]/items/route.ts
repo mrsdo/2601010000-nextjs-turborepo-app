@@ -1,0 +1,101 @@
+import { NextResponse } from "next/server"
+import { auth } from "@clerk/nextjs/server"
+
+import { createItem, findAllItemsBySpaceId } from "@/lib/database/items"
+import { findOneSpace } from "@/lib/database/space"
+
+interface PostProps {
+  params: Promise<{
+    spaceId: string
+  }>
+}
+
+interface JsonResponse {
+  name: string | null
+  categoryId: string | null
+  images: []
+  isFeatured: boolean
+  isArchived: boolean
+}
+
+const removeUndefinedValuesFromObject = <T>(obj: any): T => {
+  Object.keys(obj).forEach((key) => obj[key] === undefined && delete obj[key])
+  return obj
+}
+
+export async function POST(req: Request, { params }: PostProps) {
+  try {
+    const { spaceId } = await params
+    const { userId } = await auth()
+
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 })
+    }
+
+    const body = (await req.json()) as JsonResponse
+    const { name, categoryId, images, isFeatured, isArchived } = body
+
+    if (!name) {
+      return new NextResponse("Name is required", { status: 400 })
+    }
+
+    if (!images || !images.length) {
+      return new NextResponse("Images are required", { status: 400 })
+    }
+
+    if (!categoryId) {
+      return new NextResponse("Category Id URL is required", { status: 400 })
+    }
+
+    if (!spaceId) {
+      return new NextResponse("Space ID is required", { status: 400 })
+    }
+
+    const spaceByUserId = await findOneSpace(spaceId, userId)
+
+    if (!spaceByUserId) {
+      return new NextResponse("Unauthorized", { status: 403 })
+    }
+
+    const item = await createItem({
+      name,
+      categoryId,
+      isFeatured,
+      isArchived,
+      images,
+      spaceId: spaceId,
+    })
+
+    return NextResponse.json(item)
+  } catch (error) {
+    console.log("[ITEMS_POST]", error)
+    return new NextResponse("Internal error", { status: 500 })
+  }
+}
+
+export async function GET(req: Request, { params }: PostProps) {
+  try {
+    const { spaceId } = await params
+    const { searchParams } = new URL(req.url)
+    const categoryId = searchParams.get("categoryId") || undefined
+    const isFeatured = searchParams.get("isFeatured")
+
+    if (!spaceId) {
+      return new NextResponse("Space ID is required", { status: 400 })
+    }
+
+    const items = await findAllItemsBySpaceId(
+      removeUndefinedValuesFromObject({
+        spaceId: spaceId,
+        categoryId,
+        isFeatured: isFeatured ? true : undefined,
+        isArchived: false,
+      })
+    )
+
+    return NextResponse.json(items)
+  } catch (error) {
+    console.log("[ITEMS_GET]", error)
+    return new NextResponse("Internal error", { status: 500 })
+  }
+}

@@ -1,0 +1,50 @@
+{
+    "$schema": "https://unpkg.com/knip@latest/schema.json",
+    "workspaces": {
+        "apps/web": {
+            "entry": ["pages/**/*.{ts,tsx,js,jsx}", "app/**/*.{ts,tsx,js,jsx}", "src/**/*.{ts,tsx,js,jsx}", "next.config.js"],
+            "project": "**/*.{ts,tsx,js,jsx}",
+            "ignoreDependencies": ["@next/font"]
+        },
+        "apps/storybook": {
+            "entry": [".storybook/**/*.{js,jsx,ts,tsx}", "stories/**/*.{js,jsx,ts,tsx}"],
+            "project": "**/*.{ts,tsx,js,jsx}"
+        },
+        "packages/ui": {
+            "entry": ["src/index.{ts,tsx,js,jsx}"],
+            "project": "**/*.{ts,tsx,js,jsx}"
+        },
+        "packages/eslint-config": {
+            "entry": ["index.js"],
+            "project": "**/*.{js,jsx}"
+        },
+        "packages/tailwind-config": {
+            "entry": ["index.js", "postcss.js", "tailwind.config.js"],
+            "project": "**/*.{js,jsx}"
+        },
+        "packages/ts-config": {
+            "entry": ["base.json", "nextjs.json", "react-library.json"],
+            "project": "**/*.json"
+        }
+    },
+    "ignoreWorkspaces": ["node_modules", ".git"],
+    "entry": [".eslintrc.js", "turbo.json"],
+    "project": ["package.json"],
+    "ignoreDependencies": [
+        "@chakra-ui/react",
+        "@emotion/react",
+        "@radix-ui/react-slot",
+        "class-variance-authority",
+        "clsx",
+        "framer-motion",
+        "postcss",
+        "tailwind-merge",
+        "tailwindcss",
+        "tailwindcss-animate"
+    ],
+    "ignoreBinaries": [],
+    "ignoreExportsUsedInFile": true,
+    "next": {
+        "entry": ["apps/web/app/**/*.{ts,tsx,js,jsx}", "apps/web/pages/**/*.{ts,tsx,js,jsx}"]
+    }
+}

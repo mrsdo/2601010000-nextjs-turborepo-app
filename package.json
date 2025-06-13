@@ -1,0 +1,50 @@
+{
+  "name": "turborepo-nextjs",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "clean": "rm -rf packages/*/dist apps/*/.next .turbo packages/*/.turbo apps/*/.turbo",
+    "clean:all": "pnpm clean && rm -rf node_modules packages/*/node_modules apps/*/node_modules pnpm-lock.yaml",
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "dev:turbo": "turbo run dev:turbo --parallel",
+    "knip": "knip",
+    "knip-fix-web": "npx knip --dependencies --workspace apps/web --reporter compact",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo lint -- --fix && manypkg fix",
+    "manypkg:fix": "manypkg fix",
+    "postinstall": "manypkg check",
+    "typecheck": "turbo typecheck",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "prepare": "husky",
+    "image-sharp": "pnpm i sharp"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "packageManager": "pnpm@10.11.0",
+  "dependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@ianvs/prettier-plugin-sort-imports": "^4.2.1",
+    "@manypkg/cli": "^0.21.4",
+    "@shared/eslint-config": "workspace:*",
+    "@turbo/gen": "^2.5.4",
+    "husky": "^9.0.11",
+    "knip": "^5.61.0",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.14",
+    "turbo": "^2.5.0",
+    "eslint-config-turbo": "^1.13.4",
+    "eslint-plugin-turbo": "^2.5.4"
+  },
+  "manypkg": {
+    "ignoredRules": [
+      "INTERNAL_MISMATCH"
+    ]
+  }
+}

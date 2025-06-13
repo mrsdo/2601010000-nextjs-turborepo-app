@@ -1,0 +1,118 @@
+import { useEffect, useState } from "react"
+import Image from "next/image"
+import { ImageIcon, TrashIcon } from "@radix-ui/react-icons"
+import { CldUploadWidget } from "next-cloudinary"
+
+import { Button } from "@shared/ui"
+import { env } from "@/env.mjs"
+
+type Props = {
+  disabled?: boolean
+  onChange: (value: string) => void
+  onRemove: (value: string) => void
+  value: string[]
+  maxFiles: number
+}
+
+export const ImageUpload = ({
+  disabled,
+  onChange,
+  onRemove,
+  value,
+  maxFiles,
+}: Props) => {
+  const [isMounted, setIsMounted] = useState<boolean>(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  const onUpload = (result: any) => {
+    onChange(result.info.secure_url)
+  }
+
+  if (!isMounted) return null
+
+  return (
+    <div>
+      <div className="mb-4 flex items-center gap-4">
+        {value.map((url) => (
+          <div
+            key={url}
+            className="relative size-[280px] overflow-hidden rounded-md"
+          >
+            <div className="absolute right-2 top-2 z-10">
+              <Button
+                type="button"
+                onClick={() => onRemove(url)}
+                variant="destructive"
+                size="icon"
+              >
+                <TrashIcon className="size-4" />
+              </Button>
+            </div>
+
+            <Image
+              fill
+              className="object-cover"
+              alt="Image"
+              src={url}
+              priority
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          </div>
+        ))}
+      </div>
+
+      <CldUploadWidget
+        onUpload={onUpload}
+        uploadPreset={env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
+        options={{
+          sources: ["local", "unsplash"],
+          defaultSource: "local",
+          multiple: true,
+          maxFiles: maxFiles,
+          clientAllowedFormats: ["webp", "jpg", "jpeg", "png"],
+          maxFileSize: 1500000,
+          theme: "minimal",
+          showAdvancedOptions: false,
+          styles: {
+            palette: {
+              window: "#FFFFFF",
+              sourceBg: "#FFFFFF",
+              windowBorder: "#000000",
+              tabIcon: "#000000",
+              inactiveTabIcon: "#3E3E3E",
+              menuIcons: "#555a5f",
+              link: "#FFC904",
+              action: "#339933",
+              inProgress: "#7AFF04",
+              complete: "#339933",
+              error: "#cc0000",
+              textDark: "#000000",
+              textLight: "#fcfffd",
+            },
+          },
+        }}
+      >
+        {({ open }) => {
+          const onClick = () => {
+            open()
+          }
+
+          return (
+            <Button
+              type="button"
+              disabled={disabled}
+              variant="secondary"
+              onClick={onClick}
+            >
+              <ImageIcon className="mr-2 size-4" />
+              Upload an image
+            </Button>
+          )
+        }}
+      </CldUploadWidget>
+    </div>
+  )
+}
