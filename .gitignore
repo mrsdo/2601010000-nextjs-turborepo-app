@@ -261,4 +261,4 @@ next-env.d.ts
 .turbo/
 
 
-!/CLAUDE.md
+CLAUDE.md
