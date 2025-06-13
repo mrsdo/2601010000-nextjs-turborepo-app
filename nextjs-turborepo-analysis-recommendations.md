@@ -47,7 +47,7 @@ export class SpaceService {
     // Business logic here
     return SpaceRepository.create(userId, data)
   }
-  
+
   static async getSpacesByUser(userId: string) {
     return SpaceRepository.findByUserId(userId)
   }
@@ -57,7 +57,7 @@ export class SpaceService {
 export async function POST(request: Request) {
   const { userId } = await auth()
   const data = await request.json()
-  
+
   return SpaceService.createSpace(userId, data)
 }
 ```
@@ -94,7 +94,7 @@ export default function SpacesError({ error, reset }: ErrorPageProps) {
   return <ErrorDisplay error={error} onRetry={reset} />
 }
 
-// app/(admin)/dashboard/spaces/loading.tsx  
+// app/(admin)/dashboard/spaces/loading.tsx
 export default function SpacesLoading() {
   return <SpaceListSkeleton />
 }
@@ -116,14 +116,14 @@ export async function createSpaceAction(
   try {
     const { userId } = await auth()
     if (!userId) throw new AppError(401, 'Unauthorized')
-    
+
     const validatedData = CreateSpaceSchema.parse({
       name: formData.get('name')
     })
-    
+
     const space = await SpaceService.createSpace(userId, validatedData)
     revalidatePath('/dashboard/spaces')
-    
+
     return { success: true, data: space }
   } catch (error) {
     return { success: false, error: error.message }
@@ -133,7 +133,7 @@ export async function createSpaceAction(
 // In components
 function CreateSpaceForm() {
   const [state, formAction] = useFormState(createSpaceAction, initialState)
-  
+
   return (
     <form action={formAction}>
       <input name="name" />
@@ -195,7 +195,7 @@ const nextConfig = {
   },
   experimental: {
     optimizePackageImports: [
-      'date-fns', 
+      'date-fns',
       '@headlessui/react',
       '@radix-ui/react-icons',
       'recharts'
@@ -243,14 +243,22 @@ const RichTextEditor = dynamic(() => import('@/components/rich-text-editor'), {
 })
 
 // Route-level code splitting for admin features
-const BillboardForm = dynamic(() => 
-  import('@/features/admin/billboard/ui/form').then(mod => ({ 
-    default: mod.BillboardForm 
+const BillboardForm = dynamic(() =>
+  import('@/features/admin/billboard/ui/form').then(mod => ({
+    default: mod.BillboardForm
   }))
 )
 ```
 
 ## 🔒 Security & Best Practices
+
+### 0. **Considerations**
+- Add Content Security Policy: Consider implementing a Content Security Policy to prevent XSS attacks.
+- Implement Rate Limiting: If not already present, add rate limiting to your API routes to prevent brute force and DoS attacks.
+- Validate Data Input: Ensure all user inputs are properly validated and sanitized, especially in API endpoints.
+- Review Package Dependencies: Regularly audit your dependencies for security vulnerabilities using tools like npm audit.
+- Implement CORS Policies: Ensure your API has proper CORS policies to prevent unauthorized cross-origin requests.
+- Set up Security Headers: Implement security headers like HSTS, X-Content-Type-Options, X-Frame-Options, etc.
 
 ### 1. **Enhanced Middleware**
 
@@ -273,31 +281,31 @@ const isAdminRoute = createRouteMatcher(['/dashboard(.*)'])
 
 export default clerkMiddleware(async (auth, request) => {
   const { pathname } = request.nextUrl
-  
+
   // Rate limiting for API routes
   if (pathname.startsWith('/api/')) {
     const response = await rateLimitMiddleware(request)
     if (response) return response
   }
-  
+
   // Admin route protection
   if (isAdminRoute(request)) {
     const authObj = await auth()
     authObj.protect()
-    
+
     // Additional admin role check if needed
     const { sessionClaims } = authObj
     if (sessionClaims?.role !== 'admin') {
       return NextResponse.redirect(new URL('/unauthorized', request.url))
     }
   }
-  
+
   // Security headers
   const response = NextResponse.next()
   response.headers.set('X-Content-Type-Options', 'nosniff')
   response.headers.set('X-Frame-Options', 'DENY')
   response.headers.set('X-XSS-Protection', '1; mode=block')
-  
+
   return response
 })
 ```
@@ -320,7 +328,7 @@ export class InputSanitizer {
   static sanitizeHtml(input: string): string {
     return DOMPurify.sanitize(input, { ALLOWED_TAGS: [] })
   }
-  
+
   static sanitizeFileName(filename: string): string {
     return filename.replace(/[^a-zA-Z0-9.-]/g, '_')
   }
@@ -388,7 +396,7 @@ export class ApiResponse {
       message
     })
   }
-  
+
   static error(message: string, statusCode = 400, details?: any) {
     return NextResponse.json({
       success: false,
@@ -398,11 +406,11 @@ export class ApiResponse {
       }
     }, { status: statusCode })
   }
-  
+
   static paginated<T>(
-    data: T[], 
-    total: number, 
-    page: number, 
+    data: T[],
+    total: number,
+    page: number,
     limit: number
   ) {
     return NextResponse.json({
@@ -470,11 +478,11 @@ import { SpaceForm } from '@/features/admin/space/ui/form'
 describe('SpaceForm', () => {
   it('should validate space name input', async () => {
     render(<SpaceForm />)
-    
+
     const input = screen.getByLabelText(/space name/i)
     fireEvent.change(input, { target: { value: 'a'.repeat(71) } })
     fireEvent.click(screen.getByRole('button', { name: /create/i }))
-    
+
     expect(await screen.findByText(/name must be less than 70/i)).toBeInTheDocument()
   })
 })
@@ -489,10 +497,10 @@ describe('/api/spaces', () => {
       method: 'POST',
       body: JSON.stringify({ name: 'Test Space' })
     })
-    
+
     const response = await POST(request)
     const data = await response.json()
-    
+
     expect(response.status).toBe(201)
     expect(data.success).toBe(true)
     expect(data.data.name).toBe('Test Space')
@@ -534,14 +542,14 @@ export class ApiClient {
       },
       ...options,
     })
-    
+
     return response.json()
   }
-  
+
   static get<T>(endpoint: string) {
     return this.request<T>(endpoint)
   }
-  
+
   static post<T>(endpoint: string, data: any) {
     return this.request<T>(endpoint, {
       method: 'POST',
@@ -624,7 +632,7 @@ export class MetricsCollector {
   static async trackPageView(page: string, userId?: string) {
     // Implementation for analytics
   }
-  
+
   static async trackError(error: Error, context: any) {
     logger.error('Application error', { error, context })
   }
@@ -656,7 +664,7 @@ export class MetricsCollector {
 Your project already demonstrates excellent architectural decisions and follows many Next.js best practices. The recommended improvements will enhance:
 
 - **Developer Experience**: Better type safety, error handling, and development tools
-- **Performance**: Optimized caching, image handling, and code splitting  
+- **Performance**: Optimized caching, image handling, and code splitting
 - **Maintainability**: Service layers, proper testing, and monitoring
 - **Security**: Enhanced validation, sanitization, and middleware
 

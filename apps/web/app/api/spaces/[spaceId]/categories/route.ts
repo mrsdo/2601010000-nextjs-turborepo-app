@@ -64,8 +64,20 @@ export async function POST(req: Request, { params }: PostProps) {
 export async function GET(req: Request, { params }: PostProps) {
   try {
     const { spaceId } = await params
+    const { userId } = await auth()
+
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 })
+    }
+
     if (!spaceId) {
       return new NextResponse("Space ID is required", { status: 400 })
+    }
+
+    const spaceByUserId = await findOneSpace(spaceId, userId)
+
+    if (!spaceByUserId) {
+      return new NextResponse("Unauthorized", { status: 403 })
     }
 
     const categories = await findAllCategoriesBySpaceId(spaceId)

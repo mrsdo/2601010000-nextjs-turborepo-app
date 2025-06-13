@@ -1,17 +1,18 @@
-import { type SiteConfig } from "types"
+import { type SiteConfig } from "types";
 
 export const siteConfig: SiteConfig = {
-  name: "TechShip",
+  name: "29signals",
   description:
-    "Open source app built using the new router, server components, TailwindCSS, Radix UI, Storybook, MongoDB and everything new in Next.js 14.",
-  url: "https://turborepo-nextjs.vercel.app",
+    "This application is actively being developed and is based on the work developed by [nass59: turborepo nextjs](https://turborepo-nextjs.vercel.app/).  Built using the new router, server components, TailwindCSS, Radix UI, Storybook, MongoDB and everything new in Next.js 15.",
+  url: "https://2601010000-nextjs-turborepo-app-web.vercel.app/",
   ogImage: "https://turborepo-nextjs.vercel.app/og.jpg",
-  author: "@nass190",
+  author: "@mrsdo",
   links: {
-    twitter: "https://twitter.com/nass190",
-    github: "https://github.com/nass59/turborepo-nextjs",
-    api_github: "https://api.github.com/repos/nass59/turborepo-nextjs",
+    github: "https://github.com/mrsdo/2601010000-nextjs-turborepo-app",
+    api_github:
+      "https://api.github.com/repos/mrsdo/2601010000-nextjs-turborepo-app",
     terms: "/terms",
     privacy: "/privacy",
+    twitter: "",
   },
 }

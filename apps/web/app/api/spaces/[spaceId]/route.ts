@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server"
 
 import {
   deleteOneSpace,
-  findFirstBySpaceId,
+  findOneSpace,
   updateOneSpace,
 } from "@/lib/database/space"
 
@@ -71,11 +71,21 @@ export async function DELETE(req: Request, { params }: ApiProps) {
 export async function GET(req: Request, { params }: ApiProps) {
   try {
     const { spaceId } = await params
+    const { userId } = await auth()
+
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 })
+    }
+
     if (!spaceId) {
       return new NextResponse("Space Id is required", { status: 400 })
     }
 
-    const space = await findFirstBySpaceId(spaceId)
+    const space = await findOneSpace(spaceId, userId)
+
+    if (!space) {
+      return new NextResponse("Space not found or unauthorized", { status: 404 })
+    }
 
     return NextResponse.json(space)
   } catch (error) {

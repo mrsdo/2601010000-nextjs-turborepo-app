@@ -3,10 +3,17 @@ import { connect } from "mongoose"
 import { env } from "@/env.mjs"
 
 const MONGODB_URI = env.MONGODB_URI as string
+const MONGODB_DATABASE = env.MONGODB_DATABASE as string
 
 if (!MONGODB_URI) {
   throw new Error(
     "Please define the MONGODB_URI environment variable inside .env.local"
+  )
+}
+
+if (!MONGODB_DATABASE) {
+  throw new Error(
+    "Please define the MONGODB_DATABASE environment variable inside .env.local"
   )
 }
 
@@ -29,6 +36,7 @@ async function dbConnect() {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
+      dbName: MONGODB_DATABASE // Explicitly specify which database to use
     }
 
     cached.promise = connect(MONGODB_URI, opts).then((mongoose) => {
