@@ -4,10 +4,14 @@ A modern, full-stack multi-tenant content management system built with Next.js 1
 
 ## 🚀 Live Demo
 
-> **Note**: This application is actively being developed
-> https://turborepo-nextjs.vercel.app/
+> **Note**: This application is actively being developed and is based on the work developed by [nass59: turborepo nextjs](https://turborepo-nextjs.vercel.app/)
+> - This Project Repo: https://github.com/mrsdo/2601010000-nextjs-turborepo-app/
+> - Vercel Demo:
 
+---
 ## ✨ Key Features
+
+See [FEATURES.md](./FEATURES.md) and [Guidelines Documentation](./GUIDELINES.md)
 
 ### 🏢 Multi-Tenant Architecture
 - **Isolated Workspaces**: Each user can create and manage multiple spaces
@@ -53,8 +57,8 @@ A modern, full-stack multi-tenant content management system built with Next.js 1
 - **TypeScript** for type safety
 
 #### Database & Storage
-- **MongoDB** with Mongoose ODM
-- **Cloudinary** for image storage and optimization
+- **MongoDB** with Mongoose ODM `NOTE: Future PostgreSQL DB in progress`
+- **Cloudinary** for image storage and optimization with Upload Preset configuration.
 
 #### UI & Styling
 - **Tailwind CSS** for utility-first styling
@@ -103,7 +107,7 @@ A modern, full-stack multi-tenant content management system built with Next.js 1
    ```bash
    # Copy environment template
    cp apps/web/.env.example apps/web/.env.local
-   
+
    # Configure required variables:
    # - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
    # - CLERK_SECRET_KEY
@@ -116,7 +120,7 @@ A modern, full-stack multi-tenant content management system built with Next.js 1
    ```bash
    # Start all apps
    pnpm dev
-   
+
    # Or start specific apps
    pnpm dev --filter=web    # Web app (localhost:3000)
    pnpm dev --filter=sb     # Storybook (localhost:6006)
@@ -240,7 +244,7 @@ The application is optimized for deployment on:
 ## 📚 Documentation
 
 - **[Application Features](./FEATURES.md)**: Detailed feature workflows
-- **[Claude Instructions](./CLAUDE.md)**: Development guidelines
+- **[Development Guidelines](./GUIDELINES.md)**: Development guidelines
 - **Storybook**: Component documentation at `localhost:6006`
 
 ## 🤝 Contributing
