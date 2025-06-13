@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/api/$1" },
+    { "source": "/(.*)", "destination": "/$1" }
+  ],
+  "buildCommand": "cd .. && turbo run build --filter=web --filter=docs",
+  "outputDirectory": ".next",
+  "framework": "nextjs"
+}
