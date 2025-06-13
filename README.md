@@ -1,98 +1,269 @@
-# Next.js 14 with Turborepo
+# Next.js 15 Multi-Tenant CMS with Turborepo
 
-An open source application built using the new router, server components and everything new in Next.js 14.
+A modern, full-stack multi-tenant content management system built with Next.js 15, featuring a public storefront and comprehensive admin dashboard. Organized as a monorepo using Turborepo for optimal development workflow.
 
-## Demo 👀
+## 🚀 Live Demo
 
-> **Warning**
-> This app is a work in progress.
+> **Note**: This application is actively being developed
 > https://turborepo-nextjs.vercel.app/
 
-## Features 🌟
+## ✨ Key Features
 
-- 🚀 Monorepo using **Turborepo**
-- 📁 New `/app` dir,
-- 🗂️ Routing, Layouts, Nested Layouts and Layout Groups
-- 🌎 Data Fetching, Caching and Mutation
-- ⏱️ Loading UI
-- 🛠️ Server and Client Components
-- 🚦 API Routes and Middlewares
-- 👮‍♂️ Authentication using **Clerk**
-- 🌱 Database using **MongoDB**
-- 🧩 UI Components built using **Radix UI**
-- 🎨 Styled using **Tailwind CSS**
-- 👨‍🎨 Styleguide using **Storybook**
-- ⚡️ Validations using **Zod**
-- 🛟 Validation for type-safe environment variables using **T3 Env**
-- 👷🏼‍♂️ Written in **TypeScript**
+### 🏢 Multi-Tenant Architecture
+- **Isolated Workspaces**: Each user can create and manage multiple spaces
+- **Tenant-Scoped Data**: All content is isolated within spaces
+- **Public Configuration**: Designate one space for public display
 
-## What's inside?
+### 🎨 Content Management System
+- **Billboards**: Hero banners with images and promotional content
+- **Categories**: Organize content with billboard associations
+- **Items**: Multi-image content with featured/archived states
+- **Analytics**: Real-time insights and monthly trends
 
-This turborepo uses [pnpm](https://pnpm.io) as a package manager. It includes the following packages/apps:
+### 🔐 Authentication & Security
+- **Clerk Integration**: Secure user authentication
+- **Protected Routes**: Admin dashboard requires authentication
+- **User-Scoped Access**: Users only see their own content
 
-### Apps and Packages
+### 🌐 Public Storefront
+- **Homepage**: Featured items and hero billboards
+- **Category Pages**: Filtered content displays
+- **Item Details**: Individual item pages with galleries
+- **Responsive Design**: Mobile-first approach
 
-- `web`: another [Next.js 14](https://nextjs.org) app
-- `storybook`: a [Storybook](https://storybook.js.org/blog/in-app-tour-for-new-users/) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
-- `eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `ts-config`: `tsconfig.json`s used throughout the monorepo
-- `tailwind-config`: `tsconfig.json`s used throughout the monorepo
+## 🏗️ Architecture
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This turborepo has some additional tools already setup:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
+### Monorepo Structure
 ```
-cd my-turborepo
-pnpm run build
+├── apps/
+│   ├── web/           # Next.js 15 main application
+│   └── storybook/     # Component documentation
+├── packages/
+│   ├── ui/            # Shared component library (27+ components)
+│   ├── eslint-config/ # Centralized ESLint rules
+│   ├── ts-config/     # TypeScript configurations
+│   └── tailwind-config/ # Tailwind CSS setup
 ```
 
-### Develop
+### Technology Stack
 
-To develop all apps and packages, run the following command:
+#### Core Framework
+- **Next.js 15** with App Router and Server Components
+- **React 19** with latest features
+- **TypeScript** for type safety
 
+#### Database & Storage
+- **MongoDB** with Mongoose ODM
+- **Cloudinary** for image storage and optimization
+
+#### UI & Styling
+- **Tailwind CSS** for utility-first styling
+- **Radix UI** primitives for accessibility
+- **shadcn/ui** design system
+- **Recharts** for analytics visualization
+
+#### Development Tools
+- **Turborepo** for monorepo management
+- **pnpm** for package management
+- **ESLint** & **Prettier** for code quality
+- **Storybook** for component development
+
+#### Form & Validation
+- **React Hook Form** for form management
+- **Zod** for schema validation
+- **T3 Env** for environment variable validation
+
+#### State Management
+- **Zustand** for client state
+- **React Server Components** for server state
+
+## 🚦 Getting Started
+
+### Prerequisites
+- Node.js 22.0.0 or higher
+- pnpm 10.11.0 or higher
+- MongoDB database
+- Cloudinary account
+- Clerk account
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd 2601010000-nextjs-turborepo-app
+   ```
+
+2. **Install dependencies**
+   ```bash
+   pnpm install
+   ```
+
+3. **Environment Setup**
+   ```bash
+   # Copy environment template
+   cp apps/web/.env.example apps/web/.env.local
+   
+   # Configure required variables:
+   # - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+   # - CLERK_SECRET_KEY
+   # - MONGODB_URI
+   # - NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+   # - SPACE_ID (for public site)
+   ```
+
+4. **Run Development**
+   ```bash
+   # Start all apps
+   pnpm dev
+   
+   # Or start specific apps
+   pnpm dev --filter=web    # Web app (localhost:3000)
+   pnpm dev --filter=sb     # Storybook (localhost:6006)
+   ```
+
+## 📝 Available Scripts
+
+### Development
+```bash
+pnpm dev              # Start all apps in development
+pnpm dev --filter=web # Start only web app
+pnpm dev --filter=sb  # Start only Storybook
 ```
-cd my-turborepo
-pnpm run dev
+
+### Building & Testing
+```bash
+pnpm build     # Build all apps and packages
+pnpm lint      # Run ESLint across all workspaces
+pnpm typecheck # Run TypeScript type checking
+pnpm format    # Format code with Prettier
 ```
 
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.org/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-pnpm dlx turbo login
+### Maintenance
+```bash
+pnpm clean     # Remove build artifacts
+pnpm clean:all # Remove all node_modules and lock files
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+## 📊 Application Features
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your turborepo:
+### Admin Dashboard (`/dashboard`)
+- **Space Management**: Create and switch between workspaces
+- **Content Creation**: Manage billboards, categories, and items
+- **Analytics**: View content metrics and trends
+- **User Settings**: Configure workspace preferences
 
+### Public Site
+- **Homepage**: Featured items and promotional content
+- **Explore**: Browse all items with filtering
+- **Categories**: View items by category
+- **Blog**: Content marketing section
+- **Documentation**: Feature guides and API docs
+
+### API Routes
+RESTful API design with full CRUD operations:
+- `/api/spaces` - Workspace management
+- `/api/spaces/{id}/billboards` - Billboard management
+- `/api/spaces/{id}/categories` - Category management
+- `/api/spaces/{id}/items` - Item management
+
+## 🎨 Component Library
+
+The `@shared/ui` package includes 27+ production-ready components:
+
+### Layout & Navigation
+- Button, Card, Dialog, Sheet
+- Command, Dropdown Menu, Popover
+- Table, Data Table
+
+### Forms & Inputs
+- Input, Label, Checkbox, Select
+- Form (with React Hook Form integration)
+
+### Feedback & Display
+- Alert, Badge, Toast
+- Avatar, Separator, Skeleton
+
+### Complex Components
+- Alert Dialog, Modal
+- Heading with variants
+
+## 🔧 Development Workflow
+
+### Component Development
+1. Create components in `packages/ui/components/ui/`
+2. Export from `packages/ui/index.tsx`
+3. Document in Storybook
+4. Use across apps with `@shared/ui`
+
+### Feature Development
+1. Follow feature-based folder structure
+2. Separate UI, schemas, and utilities
+3. Use shared components and configurations
+4. Maintain type safety throughout
+
+### Code Quality
+- **ESLint**: Enforced across all workspaces
+- **TypeScript**: Strict mode enabled
+- **Prettier**: Consistent formatting
+- **Husky**: Pre-commit hooks
+
+## 🌍 Deployment
+
+### Environment Variables
+```bash
+# Authentication
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+
+# Database
+MONGODB_URI=
+
+# Storage
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=
+
+# Public Site
+SPACE_ID=your_public_space_id
 ```
-pnpm dlx turbo link
+
+### Build Process
+```bash
+pnpm build
 ```
 
-## Useful Links
+The application is optimized for deployment on:
+- **Vercel** (recommended for Next.js)
+- **Netlify**
+- **Railway**
+- **Docker** containers
 
-Learn more about the power of Turborepo:
+## 📚 Documentation
 
-- [Pipelines](https://turborepo.org/docs/core-concepts/pipelines)
-- [Caching](https://turborepo.org/docs/core-concepts/caching)
-- [Remote Caching](https://turborepo.org/docs/core-concepts/remote-caching)
-- [Scoped Tasks](https://turborepo.org/docs/core-concepts/scopes)
-- [Configuration Options](https://turborepo.org/docs/reference/configuration)
-- [CLI Usage](https://turborepo.org/docs/reference/command-line-reference)
+- **[Application Features](./FEATURES.md)**: Detailed feature workflows
+- **[Claude Instructions](./CLAUDE.md)**: Development guidelines
+- **Storybook**: Component documentation at `localhost:6006`
+
+## 🤝 Contributing
+
+1. Follow the established folder structure
+2. Use workspace packages for shared code
+3. Maintain TypeScript types
+4. Document components in Storybook
+5. Test thoroughly before commits
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 🙏 Acknowledgments
+
+- **Next.js Team** for the amazing framework
+- **Vercel** for hosting and deployment
+- **Clerk** for authentication services
+- **Radix UI** for accessible components
+- **shadcn** for the design system
+- **Turborepo** for monorepo tooling
+
+---
+
+**Built with ❤️ using Next.js 15, Turborepo, and modern web technologies**
